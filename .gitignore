@@ -2,6 +2,8 @@
 #large and sensitive files
 server/node_modules/
 server/package-lock.json
+serevr/package-lock.json
+package-lock.json
 # dependencies
 /node_modules
 /.pnp
