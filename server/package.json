@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "shoppy-app-backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "shoppy-app"
+  },
+  "keywords": [
+    "jwt",
+    "express",
+    "mongodb",
+    "react",
+    "MUI"
+  ],
+  "author": "Dharmesh Marathe",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.4.3"
+  }
+}
