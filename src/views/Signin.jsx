@@ -14,9 +14,10 @@ function Signin() {
             [event.target.name]: event.target.value
         }))
     }
-    const submitSigninForm = (event) => {
+    const submitSigninForm = async (event) => {
         event.preventDefault()
-        console.log(getFormData)
+        const res = await axios.post("http://localhost:2002/auth/signin", getFormData)
+        if(res.status === 200) alert(res.data.message)
     }
     return (
         <Container sx={{
@@ -44,7 +45,8 @@ function Signin() {
                         <TextField id="password" label="password" variant="outlined" name="password" type='password' />
                         <Button variant="contained" sx={{
                             width: "fit-content",
-                            marginTop: 2
+                            marginTop: 2,
+                            alignSelf:"center"
                         }} type="submit">Sign In</Button>
                         <Typography variant="h6" color="gray" maxWidth={"100%"} fontSize={16} textAlign={"center"} sx={{ cursor: "pointer" }}>don't have an account
                             <Link href="/signup"> sign up </Link> here
