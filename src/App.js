@@ -2,14 +2,17 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Signin from './views/Signin'
 import Signup from './views/Signup'
-
+import Homepage from './views/Homepage'
+import _404Page from './views/404Page'
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Signin />} />
+          <Route path='/' element={<Homepage />} />
+          <Route path='/signin' element={<Signin />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path="*" element={<_404Page />} />
         </Routes>
       </BrowserRouter>
     </>

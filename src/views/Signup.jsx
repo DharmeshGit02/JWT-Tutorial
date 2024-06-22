@@ -2,12 +2,14 @@ import { Container, Paper, Typography, TextField, Stack, Button, Link, List, Lis
 import { VscCaseSensitive } from "react-icons/vsc"
 import { Bs123 } from "react-icons/bs"
 import { RxWidth } from "react-icons/rx"
-import { useState } from 'react'
+import { useState} from 'react'
 import { FaShopify } from "react-icons/fa"
 import axios from 'axios'
 import validate from "../utils/FormValidator"
+import { useNavigate } from 'react-router-dom'
 
 function Signup() {
+    const navigate = useNavigate()
     const [getFormData, setFormData] = useState({
         email: "",
         password: "",
@@ -22,12 +24,14 @@ function Signup() {
     const submitSignupForm = async (event) => {
         event.preventDefault()
         const result = validate(getFormData)
-        if (!result.status) alert(result.message)
+        if (!result.status && result.message !== "pcm") alert(result.message)
         else {
             try {
-                const res = await axios.post("http://localhost:2002/auth/signup", getFormData)
+                const res = await axios.post("/auth/signup", getFormData)
                 console.log(res)
-                alert(res.data.message)
+                if(res.status === 200) {
+                    navigate("/")
+                }
             } catch (error) {
                 console.log(error)
                 alert(error.response.data.message)
@@ -82,7 +86,7 @@ function Signup() {
                         <Button variant="contained" sx={{
                             width: "fit-content",
                             marginTop: 2,
-                            alignSelf:"center"
+                            alignSelf: "center"
                         }} type='submit'>Sign Up</Button>
                         <Typography variant="h6" color="gray" maxWidth={"100%"} fontSize={16} textAlign={"center"} sx={{ cursor: "pointer" }}>already have an account
                             <Link href="/"> sign in </Link>

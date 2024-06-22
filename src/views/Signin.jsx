@@ -1,9 +1,14 @@
 import axios from "axios"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Container, Paper, Typography, TextField, Stack, Button, Link } from '@mui/material'
 import { FaShopify } from "react-icons/fa"
+import { useNavigate } from "react-router-dom"
+import Alert from '@mui/material/Alert'
+import "../App.css"
 
 function Signin() {
+    const alertBox = useRef()
+    const navigate = useNavigate()
     const [getFormData, setFormData] = useState({
         email: "",
         password: ""
@@ -16,8 +21,17 @@ function Signin() {
     }
     const submitSigninForm = async (event) => {
         event.preventDefault()
-        const res = await axios.post("http://localhost:2002/auth/signin", getFormData)
-        if(res.status === 200) alert(res.data.message)
+        alertBox.current.classList.remove("alertbox-animate")
+        try {
+            const res = await axios.post("/auth/signin", getFormData)
+            if (res.status === 200 && res.data.message === "success") {
+                console.log(res.data.message)
+                navigate("/")
+            }
+        } catch (error) {
+            alertBox.current.classList.add("alertbox-animate")
+            console.log(error)
+        }
     }
     return (
         <Container sx={{
@@ -28,6 +42,7 @@ function Signin() {
             width: "100%",
             height: "100vh"
         }}>
+            <Alert ref={alertBox} sx={{position:"absolute", opacity:0}} severity="warning" variant="filled">We are facing server issues.</Alert>
             <Paper
                 elevation={2}
                 sx={{
@@ -46,7 +61,7 @@ function Signin() {
                         <Button variant="contained" sx={{
                             width: "fit-content",
                             marginTop: 2,
-                            alignSelf:"center"
+                            alignSelf: "center"
                         }} type="submit">Sign In</Button>
                         <Typography variant="h6" color="gray" maxWidth={"100%"} fontSize={16} textAlign={"center"} sx={{ cursor: "pointer" }}>don't have an account
                             <Link href="/signup"> sign up </Link> here
