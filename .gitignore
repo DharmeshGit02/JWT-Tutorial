@@ -1,5 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 #large and sensitive files
+server/.env
 server/node_modules/
 server/test
 server/package-lock.json

@@ -2,31 +2,35 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const CORS = require('cors')
 const mongoose = require("mongoose")
-const authRoutes = require("./routes/auth")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
-const seckret_key = "JWT-TUTORIAL-SKEY"
-const app = express()
-const MongoDBURI = "mongodb+srv://Dhamu02:Dhamu_2002@cluster0.vwz9a1d.mongodb.net/JWT_tutorialDB?retryWrites=true&w=majority&appName=Cluster0"
+require('dotenv').config()
 
+
+const seckret_key = process.env.SECRET_KEY
+const MongoDBURI = process.env.mongoDB_URI
+
+const authRoutes = require("./routes/auth")
+const productsRoutes = require('./routes/products')
+
+const app = express()
+
+app.listen(2002, () => console.log("Server running.."))
 async function connectToMongoDB() {
     try {
         await mongoose.connect(MongoDBURI)
         console.log('Connected to MongoDB Atlas')
-    } catch (error) {
-        console.log(error)
-        if (error.code === "ETIMEOUT") {
-            console.log("Unable to connect to mongodb")
-        }
+    } catch (err) {
+        console.log(err)
     }
-    app.listen(2002, () => console.log("Server running.."))
-}
-
+} 
 
 connectToMongoDB()
+
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.post("/verify-jwt", (req, res) => {
     /*
         This route is used to check if user have valid token then in navbar sign in & sign up options
@@ -39,7 +43,9 @@ app.post("/verify-jwt", (req, res) => {
         else res.status(200).json({ "message": "valid token" })
     })
 })
+
 app.use("/auth", authRoutes)
+app.use("/products", productsRoutes)
 
 
 

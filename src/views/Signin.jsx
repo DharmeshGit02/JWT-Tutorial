@@ -1,14 +1,13 @@
 import axios from "axios"
 import { useState, useRef } from "react"
-import { Container, Paper, Typography, TextField, Stack, Button, Link } from '@mui/material'
+import { Container, Paper, Typography, TextField, Stack, Button, Link, Alert } from '@mui/material'
 import { FaShopify } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
-import Alert from '@mui/material/Alert'
 import "../App.css"
 
 function Signin() {
-    const alertBox = useRef()
     const navigate = useNavigate()
+    const [userFeedback, setUserFeedback] = useState({status:false, message:"", type:""})
     const [getFormData, setFormData] = useState({
         email: "",
         password: ""
@@ -21,15 +20,30 @@ function Signin() {
     }
     const submitSigninForm = async (event) => {
         event.preventDefault()
-        alertBox.current.classList.remove("alertbox-animate")
         try {
             const res = await axios.post("/auth/signin", getFormData)
             if (res.status === 200 && res.data.message === "success") {
                 console.log(res.data.message)
+                setUserFeedback({
+                    status:false,
+                    message:"",
+                    type:""
+                })
                 navigate("/")
             }
+            else {
+                setUserFeedback({
+                    status:true,
+                    message:"Invalid Credentials",
+                    type:"warning"
+                })
+            }
         } catch (error) {
-            alertBox.current.classList.add("alertbox-animate")
+            setUserFeedback({
+                status:true,
+                message:"Facing Server Issues..",
+                type:"error"
+            })
             console.log(error)
         }
     }
@@ -42,7 +56,6 @@ function Signin() {
             width: "100%",
             height: "100vh"
         }}>
-            <Alert ref={alertBox} sx={{position:"absolute", opacity:0}} severity="warning" variant="filled">We are facing server issues.</Alert>
             <Paper
                 elevation={2}
                 sx={{
@@ -58,6 +71,7 @@ function Signin() {
                     <Stack mt={5} gap={2}>
                         <TextField id="email" label="email" variant="outlined" name="email" />
                         <TextField id="password" label="password" variant="outlined" name="password" type='password' />
+                        {userFeedback ? <Alert severity={userFeedback.type}>{userFeedback.message}</Alert> : ""}
                         <Button variant="contained" sx={{
                             width: "fit-content",
                             marginTop: 2,
